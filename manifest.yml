@@ -1,0 +1,10 @@
+applications:
+- name: elastic_demo
+  memory: 256M
+  instances: 1
+#  domain: de.a9sapp.eu
+  buildpack: 'https://github.com/cloudfoundry/ruby-buildpack.git'
+  path: .
+  command: "bundle exec rails s -p $PORT"
+  services:
+  - es1
