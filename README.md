@@ -1,24 +1,16 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+```
+# start elasticsearch
+docker run -d -p 9200:9200 elasticsearch
 
-* Ruby version
+# install app dependencies and start the server
+bundle
+bundle exec rails s -b localhost
 
-* System dependencies
+# seed data
+curl localhost:3000/seed
+```
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Open [http://localhost:3000/](http://localhost:3000/) in your browser.
