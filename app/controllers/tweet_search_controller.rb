@@ -20,7 +20,6 @@ class TweetSearchController < ApplicationController
       users.each do |user|
         10.times do
           HTTParty.post( "#{elastic_url.first}/twitter/tweet", basic_auth: elasticsearch_auth, body: {"user" => "#{user}", "message": "#{FFaker::BaconIpsum.sentence}"}.to_json)
-
         end
       end
       flash[:success] = "Seeded Elasticsearch"
