@@ -1,6 +1,4 @@
 <%= render "form" %>
 
-<%= @text_results %>
-<br>
-<br>
-<%= @name_results %>
+<%= render "results", results: @text_results, title: "Results by text" %>
+<%= render "results", results: @name_results, title: "Results by user" %>

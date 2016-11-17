@@ -1,4 +1,10 @@
+<h3>Search sample tweet database</h2>
+
+<div>
+Search for top 5 sample tweet entries by user (e.g. robby) and text (e.g. bacon).
+</div>
+
 <%= form_tag "/results" do %>
-  <%= text_field_tag "query", "" %>
+  <%= text_field_tag "query", params["query"] %>
   <%= submit_tag "Search" %>
 <% end %>

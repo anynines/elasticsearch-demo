@@ -1,0 +1,7 @@
+<h2><%= results["hits"]["hits"].size %> / <%= results["hits"]["total"] %> <%= title %></h2>
+
+<ul>
+  <%- for entry in results["hits"]["hits"] %>
+    <li>@<%= entry["_source"]["user"] %>: <%= entry["_source"]["message"] %></li>
+  <%- end %>
+</ul>

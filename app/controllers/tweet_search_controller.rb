@@ -3,12 +3,13 @@ require 'ffaker'
 
 class TweetSearchController < ApplicationController
   def index
+    params[:query] = 'bacon'
   end
 
   def results
     query = params[:query]
-    @text_results = HTTParty.get( "#{elasticsearch_url}/twitter/tweet/_search?pretty", basic_auth: elasticsearch_auth, body: {"query":{"match_phrase": {"message": '.*' + query + '.*' }}}.to_json)
-    @name_results = HTTParty.get( "#{elasticsearch_url}/twitter/tweet/_search?pretty", basic_auth: elasticsearch_auth, body: {"query":{"match_phrase": {"user": "#{query}" }}}.to_json)
+    @text_results = HTTParty.get("#{elasticsearch_url}/twitter/tweet/_search?pretty&size=10", basic_auth: elasticsearch_auth, body: {"query":{"match_phrase": {"message": '.*' + query + '.*' }}}.to_json)
+    @name_results = HTTParty.get("#{elasticsearch_url}/twitter/tweet/_search?pretty&size=10", basic_auth: elasticsearch_auth, body: {"query":{"match_phrase": {"user": "#{query}" }}}.to_json)
   end
 
   def seed
@@ -50,4 +51,7 @@ class TweetSearchController < ApplicationController
   def elasticsearch_auth
     { username: credentials['username'], password: credentials['password'] }
   end
+end
+
+class SeedData
 end
