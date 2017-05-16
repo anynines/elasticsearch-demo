@@ -24,8 +24,8 @@ class TweetSearchController < ApplicationController
         end
       end
       flash[:success] = "Seeded Elasticsearch"
-    rescue
-      Rails.logger.info 'failed to seed'
+    rescue StandardError => error
+      Rails.logger.info "failed to seed: #{error}"
     end
     redirect_to root_path
   end
