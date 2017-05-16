@@ -14,13 +14,11 @@ class TweetSearchController < ApplicationController
 
   def seed
     begin
-      elastic_url = credentials['host']
-
       users = ['paddy', 'ohli', 'thomyb', 'svon', 'lana', 'robby', 'stefan', 'sarah', 'jenz', 'nicom']
 
       users.each do |user|
         10.times do
-          HTTParty.post( "#{elastic_url.first}/twitter/tweet", basic_auth: elasticsearch_auth, body: {"user" => "#{user}", "message": "#{FFaker::BaconIpsum.sentence}"}.to_json)
+          HTTParty.post( "#{elasticsearch_url.first}/twitter/tweet", basic_auth: elasticsearch_auth, body: {"user" => "#{user}", "message": "#{FFaker::BaconIpsum.sentence}"}.to_json)
         end
       end
       flash[:success] = "Seeded Elasticsearch"
