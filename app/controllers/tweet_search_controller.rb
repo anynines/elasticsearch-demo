@@ -42,7 +42,7 @@ class TweetSearchController < ApplicationController
           'host' => ["http://localhost:9200"]
         }
       else
-        JSON.parse(ENV['VCAP_SERVICES'])['a9s-elasticsearch'].first['credentials']
+        JSON.parse(ENV['VCAP_SERVICES'])['a9s-elasticsearch5'].first['credentials']
       end
     end
   end
@@ -52,7 +52,7 @@ class TweetSearchController < ApplicationController
    @ca_cert_string ||= begin
      return nil if ENV['VCAP_SERVICES'].blank?
 
-     JSON.parse(ENV['VCAP_SERVICES'])['a9s-elasticsearch'].first['credentials']['cacrt']
+     JSON.parse(ENV['VCAP_SERVICES'])['a9s-elasticsearch5'].first['credentials']['cacrt']
    end
   end
 
