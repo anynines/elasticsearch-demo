@@ -1,4 +1,6 @@
 <%= render "form" %>
 
+<% Rails.logger.info @text_results.inspect %>
+
 <%= render "results", results: @text_results, title: "Results by text" %>
 <%= render "results", results: @name_results, title: "Results by user" %>

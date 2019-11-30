@@ -8,8 +8,8 @@ class TweetSearchController < ApplicationController
 
   def results
     query = params[:query]
-    @text_results = HTTParty.get("#{es_url}/twitter/tweet/_search?pretty&size=10", es_default_options.merge({body: {"query":{"match_phrase": {"message": '.*' + query + '.*' }}}.to_json}))
-    @name_results = HTTParty.get("#{es_url}/twitter/tweet/_search?pretty&size=10", es_default_options.merge({body: {"query":{"match_phrase": {"user": "#{query}" }}}.to_json}))
+    @text_results = HTTParty.get("#{es_url}/twitter/tweet/_search?pretty&size=5", es_default_options.merge({body: {"query":{"match_phrase": {"message": '.*' + query + '.*' }}}.to_json}))
+    @name_results = HTTParty.get("#{es_url}/twitter/tweet/_search?pretty&size=5", es_default_options.merge({body: {"query":{"match_phrase": {"user": "#{query}" }}}.to_json}))
   end
 
   def seed
@@ -18,10 +18,12 @@ class TweetSearchController < ApplicationController
 
       users.each do |user|
         10.times do
-          HTTParty.post("#{es_url}/twitter/tweet", es_default_options.merge({body: {"user" => "#{user}", "message": "#{FFaker::BaconIpsum.sentence}"}.to_json}))
+          result = HTTParty.post("#{es_url}/twitter/tweet", es_default_options.merge({body: {"user" => "#{user}", "message": "#{FFaker::BaconIpsum.sentence}"}.to_json}))
+          Rails.logger.info "result: #{result.inspect}"
         end
       end
       flash[:success] = "Seeded Elasticsearch"
+      Rails.logger.info "Seeded Elasticsearch"
     rescue StandardError => error
       Rails.logger.info "failed to seed: #{error}"
     end
@@ -66,7 +68,7 @@ class TweetSearchController < ApplicationController
 
   def es_default_options
     @es_default_options ||= begin
-      {basic_auth: es_auth, ssl_ca_file: ca_cert_location}
+      {basic_auth: es_auth, ssl_ca_file: ca_cert_location, :headers => {'Content-Type' => 'application/json'}}
     end
   end
 
@@ -84,8 +86,4 @@ class TweetSearchController < ApplicationController
   def tmp_dir
     ENV["TMPDIR"] || "/tmp"
   end
-end
-
-class SeedData
-
 end
