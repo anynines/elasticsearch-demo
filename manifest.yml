@@ -5,5 +5,5 @@ applications:
   buildpack: 'https://github.com/cloudfoundry/ruby-buildpack.git'
   path: .
   command: "bundle exec rails s -p $PORT"
-  services:
-  - es1
+  env:
+    RAILS_LOG_TO_STDOUT: true
