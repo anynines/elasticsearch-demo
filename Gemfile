@@ -8,7 +8,7 @@ gem 'httparty'
 gem 'jquery-rails'
 gem 'ffaker'
 
-gem 'bootstrap', '~> 4.0.0.alpha6'
+gem 'bootstrap', '~> 4.0.0'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
