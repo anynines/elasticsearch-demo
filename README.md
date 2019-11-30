@@ -4,6 +4,8 @@
 
 ### Cloud Foundry
 * `cf push`
+* `cf bs elastic_demo YOUR_INSTANCE_NAME`
+* `cf restage elastic_demo`
 * `curl <app-url>/seed`
 
 ### Local
