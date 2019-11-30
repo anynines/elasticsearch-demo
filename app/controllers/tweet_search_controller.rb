@@ -34,17 +34,20 @@ class TweetSearchController < ApplicationController
 
   def credentials
     @credentials ||= begin
-      # store ca cert file  for later use if present in VCAP_SERVICES
-      if ca_cert_string
-        File.write(ca_cert_location, ca_cert_string)
-      end
-
       if ENV['VCAP_SERVICES'].blank?
         {
           'host' => ["http://localhost:9200"]
         }
       else
-        JSON.parse(ENV['VCAP_SERVICES'])['a9s-elasticsearch5'].first['credentials']
+        vcap_services = JSON.parse(ENV['VCAP_SERVICES'])
+        cred = vcap_services[vcap_services.keys.first].first['credentials']
+
+        # store ca cert file for later use if present in VCAP_SERVICES
+        if cred['cacrt']
+          File.write(ca_cert_location, cred['cacrt'])
+        end
+
+        cred
       end
     end
   end
@@ -52,9 +55,7 @@ class TweetSearchController < ApplicationController
   # returns nil if not present
   def ca_cert_string
    @ca_cert_string ||= begin
-     return nil if ENV['VCAP_SERVICES'].blank?
-
-     JSON.parse(ENV['VCAP_SERVICES'])['a9s-elasticsearch5'].first['credentials']['cacrt']
+     vcap_services[vcap_services.keys.first].first['credentials']['cacrt']
    end
   end
 
@@ -75,12 +76,22 @@ class TweetSearchController < ApplicationController
   # Returns ca cert location if cert str is present, otherwise nil
   def ca_cert_location
     @ca_cert_location ||= begin
-      if ca_cert_string
+      if cf?
         File.join(tmp_dir, 'ca.crt')
       else
         nil
       end
     end
+  end
+
+  def cf?
+    ENV['VCAP_SERVICES'].present?
+  end
+
+  def vcap_services
+    return {} if not cf?
+
+    JSON.parse(ENV['VCAP_SERVICES'])
   end
 
   def tmp_dir
